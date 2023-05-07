@@ -1,4 +1,4 @@
-import { Car } from "./car.js";
+import { Car } from "./modules/car.js";
 
 /** @type {HTMLCanvasElement} */
 const canvas = document.querySelector("#canvas");
