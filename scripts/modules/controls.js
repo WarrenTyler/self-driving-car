@@ -24,8 +24,8 @@ export class Controls {
           this.right = true;
           break;
       }
-      console.table(this);
     };
+    
     document.onkeyup = (e) => {
       switch (e.key.toLocaleLowerCase()) {
         case "w":
@@ -41,7 +41,6 @@ export class Controls {
           this.right = false;
           break;
       }
-      console.table(this);
     };
   }
 }

@@ -11,67 +11,97 @@ export class Car {
     this.speed = 0;
     this.acceleration = 0.2;
     this.friction = 0.05;
+    this.angle = 0;
 
     this.controls = new Controls();
   }
+  update() {
+    this.#move();
+  }
+
+  #move() {
+    if (this.controls.forward) {
+      this.speed += this.acceleration;
+    }
+    if (this.controls.backward) {
+      this.speed -= this.acceleration;
+    }
+
+    if (this.speed > this.maxSpeed) {
+      this.speed = this.maxSpeed;
+    }
+    if (this.speed < -this.maxSpeed / 2) {
+      this.speed = -this.maxSpeed / 2;
+    }
+
+    if (this.speed > 0) {
+      this.speed -= this.friction;
+    }
+    if (this.speed < 0) {
+      this.speed += this.friction;
+    }
+
+    if (Math.abs(this.speed) < this.friction) {
+      this.speed = 0;
+    }
+
+    if (this.speed != 0) {
+      const flip = this.speed > 0 ? 1 : -1;
+
+      if (this.controls.left) {
+        this.angle += 0.03 * flip;
+      }
+      if (this.controls.right) {
+        this.angle -= 0.03 * flip;
+      }
+    }
+
+    this.x -= Math.sign(this.angle) * this.speed;
+    this.y -= Math.cos(this.angle) * this.speed;
+  }
+
   // update() {
-  //   if (this.controls.forward) {
+  //   const { forward, backward } = this.controls;
+
+  //   if (forward) {
   //     this.speed += this.acceleration;
   //   }
-  //   if (this.controls.backward) {
+  //   if (backward) {
   //     this.speed -= this.acceleration;
   //   }
 
-  //   if (this.speed > this.maxSpeed) {
-  //     this.speed = this.maxSpeed;
-  //   }
-  //   if (this.speed < -this.maxSpeed / 2) {
-  //     this.speed = -this.maxSpeed / 2;
-  //   }
-    
+  //   this.speed = Math.max(
+  //     -this.maxSpeed / 2,
+  //     Math.min(this.speed, this.maxSpeed)
+  //   );
+
   //   if (this.speed > 0) {
   //     this.speed -= this.friction;
-  //   }
-  //   if (this.speed < 0) {
+  //   } else if (this.speed < 0) {
   //     this.speed += this.friction;
   //   }
 
+  //   if (Math.abs(this.speed) < this.friction) {
+  //     this.speed = 0;
+  //   }
 
   //   this.y -= this.speed;
   // }
-  update() {
-    const { forward, backward } = this.controls;
-  
-    if (forward) {
-      this.speed += this.acceleration;
-    }
-    if (backward) {
-      this.speed -= this.acceleration;
-    }
-  
-    this.speed = Math.max(-this.maxSpeed / 2, Math.min(this.speed, this.maxSpeed));
-  
-    if (this.speed > 0) {
-      this.speed -= this.friction;
-    } else if (this.speed < 0) {
-      this.speed += this.friction;
-    }
-  
-    this.y -= this.speed;
-  }
-  
+
   /**
    * Draws the Car on the given canvas context.
    * @param {CanvasRenderingContext2D} ctx - The canvas context to draw on.
    */
   draw(ctx) {
+    ctx.save();
+
+    ctx.translate(this.x, this.y);
+    ctx.rotate(-this.angle);
+
     ctx.beginPath();
-    ctx.rect(
-      this.x - this.width / 2,
-      this.y - this.height / 2,
-      this.width,
-      this.height
-    );
+    ctx.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     ctx.fill();
+
+    ctx.restore();
   }
 }
