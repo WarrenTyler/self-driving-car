@@ -56,37 +56,9 @@ export class Car {
       }
     }
 
-    this.x -= Math.sign(this.angle) * this.speed;
+    this.x -= Math.sin(this.angle) * this.speed;
     this.y -= Math.cos(this.angle) * this.speed;
   }
-
-  // update() {
-  //   const { forward, backward } = this.controls;
-
-  //   if (forward) {
-  //     this.speed += this.acceleration;
-  //   }
-  //   if (backward) {
-  //     this.speed -= this.acceleration;
-  //   }
-
-  //   this.speed = Math.max(
-  //     -this.maxSpeed / 2,
-  //     Math.min(this.speed, this.maxSpeed)
-  //   );
-
-  //   if (this.speed > 0) {
-  //     this.speed -= this.friction;
-  //   } else if (this.speed < 0) {
-  //     this.speed += this.friction;
-  //   }
-
-  //   if (Math.abs(this.speed) < this.friction) {
-  //     this.speed = 0;
-  //   }
-
-  //   this.y -= this.speed;
-  // }
 
   /**
    * Draws the Car on the given canvas context.
