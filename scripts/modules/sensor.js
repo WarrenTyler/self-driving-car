@@ -1,16 +1,24 @@
 import { lerp } from "./utils.js";
 
 export class Sensor {
+  /**
+   * Initializes a new instance of the Sensor class.
+   * @param {Car} car - The car object to which this sensor is attached.
+   */
   constructor(car) {
     this.car = car;
-    this.rayCount = 1;
-    this.rayLength = 100;
-    this.raySpread = Math.PI / 4;
+    this.rayCount = 5; // Number of rays to cast
+    this.rayLength = 150; // Length of each ray
+    this.raySpread = Math.PI / 2; // Spread angle of the rays (90 degrees)
 
     this.rays = [];
   }
 
   update() {
+    this.#castRays(); // Invoke the ray casting function
+  }
+
+  #castRays() {
     this.rays = [];
     for (let i = 0; i < this.rayCount; i++) {
       // Calculate the ray angle using linear interpolation (lerp)
@@ -31,6 +39,10 @@ export class Sensor {
     }
   }
 
+  /**
+   * Draws the sensor rays on the canvas context.
+   * @param {CanvasRenderingContext2D} ctx - The canvas context to draw on.
+   */
   draw(ctx) {
     for (let i = 0; i < this.rayCount; i++) {
       const [start, end] = this.rays[i];
