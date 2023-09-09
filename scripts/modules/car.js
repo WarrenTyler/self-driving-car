@@ -1,6 +1,17 @@
 import { Controls } from "./controls.js";
+import { Sensor } from "./sensor.js";
 
+/**
+ * Represents a car object.
+ */
 export class Car {
+  /**
+   * Initializes a new instance of the Car class.
+   * @param {number} x - The x-coordinate of the car's position.
+   * @param {number} y - The y-coordinate of the car's position.
+   * @param {number} width - The width of the car.
+   * @param {number} height - The height of the car.
+   */
   constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
@@ -13,10 +24,17 @@ export class Car {
     this.friction = 0.05;
     this.angle = 0;
 
+    // Create Controls and Sensor instances for the car
     this.controls = new Controls();
+    this.sensor = new Sensor(this);
   }
+
+  /**
+   * Updates the car's position and sensor data.
+   */
   update() {
     this.#move();
+    this.sensor.update();
   }
 
   #move() {
@@ -58,7 +76,7 @@ export class Car {
   }
 
   /**
-   * Draws the Car on the given canvas context.
+   * Draws the Car and its sensor on the given canvas context.
    * @param {CanvasRenderingContext2D} ctx - The canvas context to draw on.
    */
   draw(ctx) {
@@ -78,5 +96,9 @@ export class Car {
 
     // Restore the canvas to its previous state (undo the translation and rotation)
     ctx.restore();
+
+    // Draw the car's sensor data
+    this.sensor.draw(ctx);
   }
 }
+
